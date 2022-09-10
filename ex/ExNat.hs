@@ -35,7 +35,7 @@ instance Show Nat where
 
 instance Eq Nat where
 
-    (==) = undefined
+    (==) a b = show a == show b
 
 instance Ord Nat where
 
@@ -45,41 +45,52 @@ instance Ord Nat where
     -- Howevener, you should define them WITHOUT using (<=).
     -- Both are binary functions: max m n = ..., etc.
 
-    min = undefined
+    min (Succ n) (Succ m) = Succ (min n m)
+    min _ _ = Zero
 
-    max = undefined
+    max (Succ n) (Succ m) = Succ (max n m)
+    max n _ = n
+    max _ n = n
 
 isZero :: Nat -> Bool
-isZero = undefined
+isZero Zero = True
+isZero (Succ _) = False
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred = undefined
+pred Zero = Zero
+pred (Succ n) = n
 
 even :: Nat -> Bool
-even = undefined
+even Zero = True
+even (Succ n) = odd n
 
 odd :: Nat -> Bool
-odd = undefined
+odd Zero = False
+odd (Succ n) = even n
 
 -- addition
 (<+>) :: Nat -> Nat -> Nat
-(<+>) = undefined
-
+(<+>) n Zero = n
+(<+>) n (Succ m) = Succ (n <+> m)
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 (<->) :: Nat -> Nat -> Nat
-(<->) = undefined
-
+(<->) Zero n = Zero
+(<->) n Zero = n
+(<->) (Succ n) (Succ m) = n <-> m
+ 
 -- multiplication
 (<*>) :: Nat -> Nat -> Nat
-(<*>) = undefined
+(<*>) n Zero = Zero
+(<*>) n (Succ m) = n + (n <*> m)
 
 -- exponentiation
 (<^>) :: Nat -> Nat -> Nat
-(<^>) = undefined
+(<^>) n Zero = (Succ Zero)
+(<^>) n (Succ m) = n <^> (m) <*> n
 
 -- quotient
 (</>) :: Nat -> Nat -> Nat
